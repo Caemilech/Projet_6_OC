@@ -1,134 +1,104 @@
 // Appel API Works
 
-let works_array = []
+var worksArray = []
 
-const fetchworks = async () => {
+const fetchWorks = async () => {
     await fetch('http://localhost:5678/api/works')
     .then((res) => res.json())
     .then((promise) => {
-        works_array = promise
-        console.log(works_array)    
+        worksArray = promise  
     })
 } 
 
 // Appel API Categories
 
-let category_array = []
+var categoryArray = []
 
-const fetchcategory = async () => {
+const fetchCategory = async () => {
     await fetch('http://localhost:5678/api/categories')
     .then((res) => res.json())
     .then((promise) => {
-        category_array = promise
-        console.log(category_array)    
+        categoryArray = promise   
     })
 } 
 
 // Création des travaux
 
 const works = async () => {
-    await fetchworks()   
-       
-    const works = works_array.length
-    
-    for(let index = 0; index < works; index++){
-        const img_works = document.createElement('img')
+    await fetchWorks()   
+        
+    for(const works of worksArray){
+        const imgWorks = document.createElement('img')
         const gallery = document.querySelector('.gallery')
         const legend = document.createElement('figure')
-        const legend_works = document.createElement('figcaption')
+        const legendWorks = document.createElement('figcaption')
         gallery.appendChild(legend)
-        legend.appendChild(img_works)
-        legend.appendChild(legend_works)
+        legend.appendChild(imgWorks)
+        legend.appendChild(legendWorks)
 
-        const link_img_works = works_array[index].imageUrl
-	    img_works.setAttribute('src', link_img_works)
+        const linkImgWorks = works.imageUrl
+	    imgWorks.setAttribute('src', linkImgWorks)
 
-        const alt_img_works = works_array[index].title
-        img_works.setAttribute('alt', alt_img_works)
+        const altImgWorks = works.title
+        imgWorks.setAttribute('alt', altImgWorks)
 
-        legend_works.textContent = works_array[index].title             
+        legendWorks.textContent = works.title             
     }
-    console.log(works)
 }
 
 // Création du Menu Filtre
 
-category_class = ['Objets', 'Appartements', 'Hotel_et_restaurants']
-
-const menu_filter = async () => {
-    await fetchcategory()
+const menuFilter = async () => {
+    await fetchCategory()
     
-    const category = category_array.length
-    const filters = document.querySelector('.filters')
+    const filters = document.querySelector('.filters')    
+    const menuMain = document.createElement('span')    
+    menuMain.textContent = 'Tous'
+    filters.appendChild(menuMain)
 
-    const menu_main = document.createElement('h2')    
-    menu_main.textContent = 'Tous'
-    menu_main.classList.add('Tous')
-    filters.appendChild(menu_main)  
+    menuMain.addEventListener('click', function(){
+        filtersMain()
+    })
+      
+    for(const category of categoryArray){
+        const menuFilter = document.createElement('span');
+        menuFilter.textContent = category.name        
+        filters.appendChild(menuFilter)
 
-    for (let index = 0; index < category; index++) {	    
-        const menu_filter = document.createElement('h2');
-        menu_filter.textContent = category_array[index].name
-        menu_filter.classList.add(category_class[index])  
-        filters.appendChild(menu_filter)     
+        menuFilter.addEventListener('click', function () {
+            filtersCategory(category.id)          
+        })     
     }  
 }
 
 // Création du Filtre
 
-const filters_main = () => {   
-    const works = works_array.length 
-    const legend = document.querySelectorAll('.gallery figure') 
-     
-    for(let index = 0; index < works; index++){           
-        legend[index].style.display = 'block'        
+const filtersMain = () => {   
+    const legends = document.querySelectorAll('.gallery figure') 
+
+    for(const legend of legends){       
+        legend.style.display = 'block'        
     } 
 }
 
-const filters = (number) => {               
-    const works = works_array.length        
+const filtersCategory = (idCategory) => {        
+    const works = worksArray.length  
 
     const legend = document.querySelectorAll('.gallery figure') 
                       
     for(let index = 0; index < works; index++){            
                 
-        if(works_array[index].category.name === category_array[number].name){
+        if(worksArray[index].category.id === idCategory){
             legend[index].style.display = 'block'
         }
         
-        if (works_array[index].category.name !== category_array[number].name){
+        if (worksArray[index].category.id !== idCategory){
             legend[index].style.display = 'none'
         }       
     }
 }
 
-// Création des évèvements
-
-document.addEventListener('click', function (event){
-    if (!event.target.matches('.Tous')) return  
-    filters_main()
-})
-
-document.addEventListener('click', function (event){
-    if (!event.target.matches('.Objets')) return  
-    filters(0)      
-})
-
-document.addEventListener('click', function (event){
-    if (!event.target.matches('.Appartements')) return  
-    filters(1)
-})
-
-document.addEventListener('click', function (event){
-    if (!event.target.matches('.Hotel_et_restaurants')) return  
-    filters(2)
-})
-
 // Appel des fonctions  
 
-fetchworks()
-fetchcategory()
 works()
-menu_filter()
-filters_main()
-filters()
+menuFilter()
