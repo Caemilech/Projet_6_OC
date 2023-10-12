@@ -145,9 +145,9 @@ li:hover {
 	padding-left: 10px;
     padding-right: 10px;	
 }
-.filters span:hover{
-	color: white;
+.filters span.active{
 	background-color: #1D6154;
+    color: white;
 }
 /*** CSS Filters ***/
 .gallery {
@@ -209,4 +209,31 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
-
+/*** Login Page ***/
+.login{
+	font-weight: 600;
+}
+.password{
+	text-decoration: underline;
+	text-align: center;
+}
+/*** Utilisateur Connecté ***/
+.mode_edition{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;	
+	font-size: 16px;
+}
+.mode_edition span{
+	color: white;	
+}
+.modify{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+}
+.modify span, .modify img{
+	margin-bottom: 2em;	
+}

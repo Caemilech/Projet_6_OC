@@ -47,16 +47,20 @@ const works = async () => {
 }
 
 // Création du Menu Filtre
+const filters = document.querySelector('.filters')   
 
 const menuFilter = async () => {
     await fetchCategory()
     
-    const filters = document.querySelector('.filters')    
-    const menuMain = document.createElement('span')    
+    const menuMain = document.createElement('span') 
+    menuMain.classList = 'active'   
     menuMain.textContent = 'Tous'
     filters.appendChild(menuMain)
 
     menuMain.addEventListener('click', function(){
+        const filtersActive = document.getElementsByClassName('active')
+        filtersActive[0].className = filtersActive[0].className.replace('active', "")
+        this.className += 'active'
         filtersMain()
     })
       
@@ -64,8 +68,11 @@ const menuFilter = async () => {
         const menuFilter = document.createElement('span');
         menuFilter.textContent = category.name        
         filters.appendChild(menuFilter)
-
+        
         menuFilter.addEventListener('click', function () {
+            const filtersActive = document.getElementsByClassName('active')
+            filtersActive[0].className = filtersActive[0].className.replace('active', "")
+            this.className += 'active'
             filtersCategory(category.id)          
         })     
     }  
@@ -102,3 +109,52 @@ const filtersCategory = (idCategory) => {
 
 works()
 menuFilter()
+
+// Récupération du LocalStorage
+
+const token = localStorage.getItem('Token')
+const userId = localStorage.getItem('UserId')
+    
+// Modifications quand l'utilisateur est connecté
+
+if (userId === '1') {
+    // LogOut
+    document.querySelector('.logout').textContent = 'logout'
+    //Mode édition
+    const modeEdition = document.querySelector('.mode_edition')
+    modeEdition.style.backgroundColor = 'black'
+    modeEdition.style.height = '59px'
+    const imgModeEdition = document.createElement('img')
+    imgModeEdition.setAttribute('src', './assets/icons/modeEdition.svg')
+    imgModeEdition.setAttribute('alt', 'Mode édition')
+    modeEdition.appendChild(imgModeEdition)
+    const textModeEdition = document.createElement('span')
+    textModeEdition.textContent = 'Mode édition'
+    modeEdition.appendChild(textModeEdition)
+    //Modifier
+    const modifyWorks = document.querySelector('.modify')
+    console.log(modifyWorks)
+    const modifyImgButton = document.createElement('img')
+    modifyImgButton.setAttribute('src', './assets/icons/modifier.svg')
+    modifyImgButton.setAttribute('alt', 'Editer les travaux')
+    modifyWorks.appendChild(modifyImgButton)
+    const modifyText = document.createElement('span')
+    modifyText.textContent = 'modifier'
+    modifyWorks.appendChild(modifyText)
+    //Suppression des filtres
+    filters.style.display = 'none'
+}
+
+// Déconnexion de l'utilisateur
+
+const logout = document.querySelector('.logout')
+
+logout.addEventListener('click', function () {
+    localStorage.removeItem('Token')
+    localStorage.removeItem('UserId')    
+    window.location.href = 'file:///C:/Users/util/Desktop/FormationOC/Portfolio-architecte-sophie-bluel-master/Portfolio-architecte-sophie-bluel-master/FrontEnd/login.html'
+})
+
+
+
+
