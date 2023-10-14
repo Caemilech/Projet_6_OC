@@ -30,12 +30,12 @@ const works = async () => {
     for(const works of worksArray){
         const imgWorks = document.createElement('img')
         const gallery = document.querySelector('.gallery')
-        const legend = document.createElement('figure')
+        const legend = document.createElement('figure')    
         const legendWorks = document.createElement('figcaption')
         gallery.appendChild(legend)
         legend.appendChild(imgWorks)
         legend.appendChild(legendWorks)
-
+        
         const linkImgWorks = works.imageUrl
 	    imgWorks.setAttribute('src', linkImgWorks)
 
@@ -44,6 +44,31 @@ const works = async () => {
 
         legendWorks.textContent = works.title             
     }
+}
+
+const worksModal = async () => {
+    await fetchWorks() 
+    
+    for(const works of worksArray){
+        const imgWorks = document.createElement('img')
+        imgWorks.classList = 'modal_works_img'
+        const modalWorks = document.querySelector('.modal_works')
+        const legend = document.createElement('figure')  
+        modalWorks.appendChild(legend)
+        legend.appendChild(imgWorks)
+
+        const deleteWorks = document.createElement('img')  
+        deleteWorks.setAttribute('src', './assets/icons/deleteworks.svg') 
+        deleteWorks.setAttribute('alt', 'Suppression du travaux')
+        deleteWorks.classList = 'delete_works'
+        legend.appendChild(deleteWorks)
+        
+        const linkImgWorks = works.imageUrl
+        imgWorks.setAttribute('src', linkImgWorks)
+
+        const altImgWorks = works.title
+        imgWorks.setAttribute('alt', altImgWorks)        
+    }    
 }
 
 // Création du Menu Filtre
@@ -92,7 +117,7 @@ const filtersCategory = (idCategory) => {
     const works = worksArray.length  
 
     const legend = document.querySelectorAll('.gallery figure') 
-                      
+                          
     for(let index = 0; index < works; index++){            
                 
         if(worksArray[index].category.id === idCategory){
@@ -108,6 +133,7 @@ const filtersCategory = (idCategory) => {
 // Appel des fonctions  
 
 works()
+worksModal()
 menuFilter()
 
 // Récupération du LocalStorage
@@ -133,7 +159,6 @@ if (userId === '1') {
     modeEdition.appendChild(textModeEdition)
     //Modifier
     const modifyWorks = document.querySelector('.modify')
-    console.log(modifyWorks)
     const modifyImgButton = document.createElement('img')
     modifyImgButton.setAttribute('src', './assets/icons/modifier.svg')
     modifyImgButton.setAttribute('alt', 'Editer les travaux')
@@ -155,6 +180,46 @@ logout.addEventListener('click', function () {
     window.location.href = 'file:///C:/Users/util/Desktop/FormationOC/Portfolio-architecte-sophie-bluel-master/Portfolio-architecte-sophie-bluel-master/FrontEnd/login.html'
 })
 
+// Modal
 
+const modalContainer = document.querySelector('.modal_container')
+const overlay = document.createElement('div')
+overlay.classList = 'overlay'
+modalContainer.appendChild(overlay)
+const modal = document.createElement('div')
+modal.classList = 'modal'
+modalContainer.appendChild(modal)
+const modalClose = document.createElement('img')
+modalClose.classList = 'modal_close'
+modalClose.setAttribute('src', './assets/icons/closemodal.svg')
+modalClose.setAttribute('alt', 'Fermeture de la modale')
+modal.appendChild(modalClose)
+const modalTitle = document.createElement('span')
+modalTitle.textContent = 'Galerie photo'
+modal.appendChild(modalTitle)
+const modalWorks = document.createElement('div')
+modalWorks.classList = 'modal_works'
+modal.appendChild(modalWorks)
+const modalButton = document.createElement('button')
+modalButton.textContent = 'Ajouter une photo'
+modalButton.classList = 'modal_button'
+modal.appendChild(modalButton)
 
+// Modal JS
 
+const modalOpenEvent = document.querySelector('.modify')
+modalOpenEvent.addEventListener('click', function(){
+    modalContainer.style.display = 'block'
+})
+
+const modalCloseEvent = document.querySelector('.modal_close') 
+modalCloseEvent.addEventListener('click', function(){
+    modalContainer.style.display = 'none'
+})
+
+const modalCloseOverlayEvent = document.querySelector('.overlay')
+modalCloseOverlayEvent.addEventListener('click', function(){
+    modalContainer.style.display = 'none'
+})
+
+// Supression d'un travaux
