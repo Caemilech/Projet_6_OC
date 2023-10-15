@@ -125,31 +125,6 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
-/*** CSS Filters ***/
-.filters{
-	display: flex;
-	gap: 10px;
-	justify-content: center;
-	margin-bottom: 50px
-}
-.filters span{
-	font-family: 'Syne';
-	font-weight: 700;
-	font-size: 16px;
-	color: #1D6154;
-	display: flex;
-    align-items: center;
-	height: 37px;
-	border: 1px solid #1D6154;
-	border-radius: 60px;
-	padding-left: 10px;
-    padding-right: 10px;	
-}
-.filters span.active{
-	background-color: #1D6154;
-    color: white;
-}
-/*** CSS Filters ***/
 .gallery {
 	width: 100%;
 	display: grid;
@@ -209,7 +184,32 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
-/*** Login Page ***/
+/********** My Works *********/
+/***** CSS Filters *****/
+.filters{
+	display: flex;
+	gap: 10px;
+	justify-content: center;
+	margin-bottom: 50px
+}
+.filters span{
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 16px;
+	color: #1D6154;
+	display: flex;
+    align-items: center;
+	height: 37px;
+	border: 1px solid #1D6154;
+	border-radius: 60px;
+	padding-left: 10px;
+    padding-right: 10px;	
+}
+.filters span.active{
+	background-color: #1D6154;
+    color: white;
+}
+/****** Login Page *****/
 .login{
 	font-weight: 600;
 }
@@ -217,7 +217,7 @@ footer nav ul {
 	text-decoration: underline;
 	text-align: center;
 }
-/*** Utilisateur Connecté ***/
+/***** User Connected *****/
 .mode_edition{
 	display: flex;
 	align-items: center;
@@ -228,6 +228,12 @@ footer nav ul {
 .mode_edition span{
 	color: white;	
 }
+.modify_container{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 30px;
+}
 .modify{
 	display: flex;
 	align-items: center;
@@ -237,8 +243,9 @@ footer nav ul {
 .modify span, .modify img{
 	margin-bottom: 2em;	
 }
-/*** Modal ***/
-.modal_container{	
+/***** Modal Gallery and Form *****/
+/*** Modal Position ***/
+.modal_gallery, .modal_form{	
 	display: none;
 	position: fixed;
 	top: 0;
@@ -246,58 +253,48 @@ footer nav ul {
 	width: 100%;
 	height: 100%;
 }
+/*** Modal Overlay ***/
 .overlay{
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0,0,0,0.4);
 }
+/*** Modal Container ***/
 .modal{
 	position: absolute;
-	background-color: white;
-	text-align: center;
-	padding: 60px 100px 45px 105px;
-	border-radius: 10px;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%,-50%);
+	width: 420px;
+	padding: 30px 105px 30px 105px;
+	background-color: white;
+	border-radius: 10px;
+	text-align: center;	
 }
+/*** Modal Close ***/
+.modal_close{
+	position: absolute;
+	top: 25px;
+	right: 30px;
+}
+/*** Modal Title ***/
 .modal span{
 	font-size: 26px;
 }
-.modal_button{
-	width: 237px;
-	height: 36px;
-	margin: auto;	
-	border-radius: 60px;
-	background-color: #1D6154;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: none;
-	color: white;
-	font-family: 'Syne';
-	font-size: 14px;
-	margin-top: 38px;
-}
+/*** Modal Gallery Works Container ***/
 .modal_works{
-	height: 250px;
+	height: 370px;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 26px 6px;
 	margin-top: 46px;
-	margin-bottom: 63px;
-	border-bottom: 1px solid #B3B3B3;
+	margin-bottom: 68px;
 	overflow: auto;
 }
-.modal_works_img{
-	width: 79.2px;
-	height: 104px;
-}
-.modal_close{
-	position: absolute;
-	top: 10px;
-	right: 10px;
+/*** Modal Gallery Icon Delete ***/
+.modal_works figure{
+	position: relative;
 }
 .delete_works{
 	position: absolute;
@@ -306,11 +303,85 @@ footer nav ul {
 	top: 6px;
 	left: 55px;
 }
-.modal_works figure{
-	position: relative;
+/*** Modal Works Img Width/Height ***/
+.modal_works_img{
+	width: 79px;
+	height: 104px;
 }
-.modal:before{
+/*** Modal Line***/
+.modal_line{
+	display: flex;
+	position: absolute;
 	width: 420px;
 	height: 1px;
+	top: 520px;
 	background: #B3B3B3;
+}
+/*** Modal Gallery Button***/
+.modal .modal_button{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 237px;
+	height: 36px;
+	margin: auto;	
+	border-radius: 60px;
+	border: none;
+	background-color: #1D6154;	
+	color: white;
+	font-family: 'Syne';
+	font-size: 14px;
+}
+/*** Modal Form Arrow ***/
+.modal_arrow{
+	position: absolute;
+	top: 25px;
+	left: 30px;
+}
+/*** Modal Form Add Picture Container ***/
+.modal_add_picture_container{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	height: 169px;
+	margin-top: 36px;
+	background: #E8F1F6;
+	border-radius: 3px;
+}
+.modal_add_picture_button{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 173px;
+	height: 36px;
+	border-radius: 50px;
+	background: #CBD6DC;
+	color: #306685;	
+}
+/*** Modal Form Section ***/
+.modal_form #contact{
+    width: 100%;
+	margin: 0;
+}
+.modal_form #contact form{
+	margin-top: 0;
+}
+.modal_form select{
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+.modal_add_picture_container .modal_add_picture_text{
+	color: #444;
+	font-size: 10px;
+}
+/*** Modal Form Button ***/
+.modal_form_button{
+	width: 237px !important;
+	height: 36px !important;
+	background: #A7A7A7 !important;
+	margin-top: 70px !important;
 }
