@@ -115,11 +115,10 @@ const menuFilter = async () => {
 // Récupération du LocalStorage
 
 const token = localStorage.getItem('Token')
-const userId = localStorage.getItem('UserId')
     
 // Modifications quand l'utilisateur est connecté
 
-if (userId === '1') {
+if (token){
     // LogOut
     document.querySelector('.logout').textContent = 'logout'
     // Mode édition
@@ -151,37 +150,14 @@ if (userId === '1') {
 const logout = document.querySelector('.logout')
 
 logout.addEventListener('click', function () {
-    localStorage.removeItem('Token')
-    localStorage.removeItem('UserId')    
-    window.location.href = 'file:///C:/Users/util/Desktop/FormationOC/Portfolio-architecte-sophie-bluel-master/Portfolio-architecte-sophie-bluel-master/FrontEnd/login.html'
+    localStorage.removeItem('Token')  
+    window.location.href = 'login.html'
 })
 
 /* ----------------------------------------  Modal Gallery ----------------------------------------*/
 
-const modalGallery = document.querySelector('.modal_gallery') 
-// Background de la modale
-const overlayGallery = document.createElement('div') 
-overlayGallery.classList = 'overlay overlay_gallery' 
-modalGallery.appendChild(overlayGallery) 
-// Container de la modale
-const modalGalleryContainer = document.createElement('div')
-modalGalleryContainer.classList = 'modal'
-modalGallery.appendChild(modalGalleryContainer)
-// Fermeture de la modale
-const modalGalleryClose = document.createElement('img')
-modalGalleryClose.classList = 'modal_close modal_gallery_close'
-modalGalleryClose.setAttribute('src', './assets/icons/closemodal.svg')
-modalGalleryClose.setAttribute('alt', 'Fermeture de la modale')
-modalGalleryContainer.appendChild(modalGalleryClose)
-// Titre de la modale
-const modalGalleryTitle = document.createElement('span')
-modalGalleryTitle.textContent = 'Galerie photo'
-modalGalleryContainer.appendChild(modalGalleryTitle)
-// Conteneur des travaux
-const modalGalleryWorks = document.createElement('div')
-modalGalleryWorks.classList = 'modal_works'
-modalGalleryContainer.appendChild(modalGalleryWorks)
 // Récupération des travaux via l'API pour la modale
+
 const worksModal = async () => {
     await fetchWorks() 
     
@@ -208,17 +184,9 @@ const worksModal = async () => {
     }       
 }
 
-// Modale Gallery Line
-const modalGalleryLine = document.createElement('p')
-modalGalleryLine.classList = 'modal_line'
-modalGalleryContainer.appendChild(modalGalleryLine)
-// Boutton de la modale Gallery
-const modalGalleryButton = document.createElement('span')
-modalGalleryButton.textContent = 'Ajouter une photo'
-modalGalleryButton.classList = 'modal_button modal_gallery_button'
-modalGalleryContainer.appendChild(modalGalleryButton)
-
 /* ---------------------------------------- AddEventListener Modal Gallery ----------------------------------------*/
+
+const modalGallery = document.querySelector('.modal_gallery') 
 
 // Ouvre la modale Gallery
 const modalGalleryOpen = document.querySelector('.modify')
@@ -242,61 +210,9 @@ modalFormOpen.addEventListener('click', function(){
     modalGallery.style.display = 'none'
 })
 
-/* ----------------------------------------  Modal Form ----------------------------------------*/
+/* ---------------------------------------- AddEventListener Modal Form ----------------------------------------*/
 
 const modalForm = document.querySelector('.modal_form')
-// Background de la modale
-const overlayForm = document.createElement('div')
-overlayForm.classList = 'overlay overlay_form'
-modalForm.appendChild(overlayForm)
-// Container de la modale
-const modalFormContainer = document.createElement('div')
-modalFormContainer.classList = 'modal'
-modalForm.appendChild(modalFormContainer)
-// Fermeture de la modale
-const modalFormClose = document.createElement('img')
-modalFormClose.classList = 'modal_close modal_form_close'
-modalFormClose.setAttribute('src', './assets/icons/closemodal.svg')
-modalFormClose.setAttribute('alt', 'Fermeture de la modale')
-modalFormContainer.appendChild(modalFormClose)
-// Retour vers la ModalGallery
-const modalFormArrow = document.createElement('img')
-modalFormArrow.classList = 'modal_arrow'
-modalFormArrow.setAttribute('src', './assets/icons/arrowmodal.svg')
-modalFormArrow.setAttribute('alt', 'Retour vers Galerie Photo') 
-modalFormContainer.appendChild(modalFormArrow) 
-// Titre de la modale
-const modalFormTitle = document.createElement('span')
-modalFormTitle.textContent = 'Ajout photo'
-modalFormContainer.appendChild(modalFormTitle)
-// Container Ajout Photo
-const modalAddPictureContainer = document.createElement('div')
-modalAddPictureContainer.classList = 'modal_add_picture_container'
-modalFormContainer.appendChild(modalAddPictureContainer)
-// Ajout Photo
-const modalAddPicture = document.createElement('img')
-modalAddPicture.setAttribute('src', './assets/icons/picture.svg')
-modalAddPicture.setAttribute('alt', 'Photo') 
-modalAddPictureContainer.appendChild(modalAddPicture) 
-// Bouton Ajout Photo
-const modalAddPictureButton = document.createElement('a')
-modalAddPictureButton.classList = 'modal_add_picture_button'
-modalAddPictureButton.textContent = '+ Ajouter Photo'
-modalAddPictureContainer.appendChild(modalAddPictureButton)
-// Format Image / Limite Poids Image
-const modalAddPictureText = document.createElement('span')
-modalAddPictureText.classList = 'modal_add_picture_text'
-modalAddPictureText.textContent = 'jpg, png : 4mo max'
-modalAddPictureContainer.appendChild(modalAddPictureText)
-// Formualaire de la modale Form
-const modalFormSection = document.querySelector('.modal_form_section')
-modalFormContainer.appendChild(modalFormSection)
-// Modale Gallery Line
-const modalFormLine = document.createElement('p')
-modalFormLine.classList = 'modal_line'
-modalFormContainer.appendChild(modalFormLine)
-
-/* ---------------------------------------- AddEventListener Modal Form ----------------------------------------*/
 
 // Ferme la modale Form depuis la croix
 const modalCloseForm = document.querySelector('.modal_form_close') 
