@@ -1,4 +1,4 @@
-/* ---------------------------------------- Call API Login ----------------------------------------*/
+/* ---------------------------------------- AddEventListener Fetch Post Login ----------------------------------------*/
 
 const formLogIn = document.querySelector('.login_form')
 formLogIn.addEventListener('submit', function (event) {
@@ -17,25 +17,27 @@ formLogIn.addEventListener('submit', function (event) {
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         body: chargeUtile
     })
-    .then(response => {              
-        if (!response.ok){                   
-            if(response.status === 404){              
-                showError('user-error', 'Utilisateur non trouvée')
-                             
+    .then(response => { 
+        if(!response.ok){                                  
+            if (logIn.email !== '' && logIn.password !== "") {
+                if (response.status === 404) {
+                    showError('user-error', 'Utilisateur introuvable')
+                }
             }
-            if(response.status === 401){
+            if (response.status === 401) {
                 showError('password-error', 'Mot de passe incorrect')
             }
-            throw new Error("Le serveur n'a pas répondu correctement. Erreur :" + response.status)
-        } 
-        return response.json()
+            document.getElementById('password').value = ''
+        throw new Error(response.status)
+        }
+        return response.json
     })
-    .then(data => {    
-        window.location.href = 'index.html'                    
-        localStorage.setItem('Token', JSON.stringify(data.token))        
+    .then(data => {
+        localStorage.setItem('BearerAuth', JSON.stringify(data))
+        location.href = 'index.html'
     })
     .catch(error => {      
-        console.error(error)
+        console.log(error)
     })
 })
 
@@ -44,22 +46,22 @@ formLogIn.addEventListener('submit', function (event) {
 // Affiche l'erreur
 
 const showError = (errorElement, errorMessage) => {
-    document.querySelector("."+errorElement).classList.add("display-error")
+    document.querySelector('.'+errorElement).classList.add('display-error')
     document.querySelector('.'+errorElement).innerHTML = errorMessage
 }
 
 // Efface l'erreur
 
 const clearError = () => {
-    let errors = document.querySelectorAll('.error')
-    for(let error of errors){
+    const errors = document.querySelectorAll('.error')
+    for(const error of errors){
         error.classList.remove('display-error')
     }
 }
 
 // Gestion de l'erreur
 
-let form = document.forms['login_form']
+const form = document.forms['login_form']
 
 form.onsubmit = function(event){
     

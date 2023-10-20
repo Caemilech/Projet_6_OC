@@ -30,11 +30,11 @@ const works = async () => {
     for(const works of worksArray){
         const imgWorks = document.createElement('img')
         const gallery = document.querySelector('.gallery')
-        const legend = document.createElement('figure')    
+        const legend = document.createElement('figure')
         const legendWorks = document.createElement('figcaption')
         gallery.appendChild(legend)
         legend.appendChild(imgWorks)
-        legend.appendChild(legendWorks)
+        legend.appendChild(legendWorks)        
         
         const linkImgWorks = works.imageUrl
 	    imgWorks.setAttribute('src', linkImgWorks)
@@ -114,12 +114,15 @@ const menuFilter = async () => {
 
 // Récupération du LocalStorage
 
-const token = localStorage.getItem('Token')
+const bearerAuth = JSON.parse(localStorage.getItem('BearerAuth'))
     
 // Modifications quand l'utilisateur est connecté
 
-if (token){
+const login = document.querySelector('.login')
+ 
+if (bearerAuth && bearerAuth.token){
     // LogOut
+    login.classList = 'logout logout_link'
     document.querySelector('.logout').textContent = 'logout'
     // Mode édition
     const modeEdition = document.querySelector('.mode_edition')
@@ -149,41 +152,221 @@ if (token){
 
 const logout = document.querySelector('.logout')
 
-logout.addEventListener('click', function () {
-    localStorage.removeItem('Token')  
-    window.location.href = 'login.html'
+logout.addEventListener('click', function () {    
+    localStorage.clear()  
+    location.href = 'login.html'
 })
 
 /* ----------------------------------------  Modal Gallery ----------------------------------------*/
 
 // Récupération des travaux via l'API pour la modale
 
+const modalWorks = document.querySelector('.modal_works')
 const worksModal = async () => {
     await fetchWorks() 
-    
+       
     for(const works of worksArray){
+                        
         const imgWorks = document.createElement('img')
-        imgWorks.classList = 'modal_works_img'
-        const modalWorks = document.querySelector('.modal_works')
-        console.log(modalWorks)
-        const legend = document.createElement('figure')  
+        imgWorks.classList = 'modal_works_img'        
+        
+        const legend = document.createElement('figure') 
+        
         modalWorks.appendChild(legend)
         legend.appendChild(imgWorks)
-
+        
         const deleteWorks = document.createElement('img')  
         deleteWorks.setAttribute('src', './assets/icons/deleteworks.svg') 
         deleteWorks.setAttribute('alt', 'Suppression du travaux')
         deleteWorks.classList = 'delete_works'
         legend.appendChild(deleteWorks)
-        
+
         const linkImgWorks = works.imageUrl
         imgWorks.setAttribute('src', linkImgWorks)
 
         const altImgWorks = works.title
-        imgWorks.setAttribute('alt', altImgWorks)        
-    }       
+        imgWorks.setAttribute('alt', altImgWorks)
+
+        // AddEventListener Fetch Delete
+
+        deleteWorks.addEventListener('click', function (event){
+            event.preventDefault()
+                       
+            fetch(`http://localhost:5678/api/works/${works.id}`,{
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${bearerAuth.token}`}
+            })
+            .then(response => {
+                if(response.status === 204){
+                    refreshWorks()
+                    showValidate('validate', `Projets ${works.id} a bien été supprimé`)
+                }
+                if(response.status === 401){
+                    alert("Vous n'êtes pas autorisé à supprimer ce projet, merci de vous connecter avec un compte valide")
+                    location.href = 'login.html'
+                }                
+            })
+            .catch (error => {
+                console.log(error)
+            })
+
+            function refreshWorks(){
+                                         
+                // Supprime le projet de la page d'accueil
+                const projets = document.querySelector('.gallery figure')
+                projets.remove()
+                // Supprime le projet de la modale
+                const modalProjets = document.querySelector('.modal_works figure')         
+                modalProjets.remove()
+            }              
+        })
+    }
+    
+}   
+
+/* ----------------------------------------  Modal Form ----------------------------------------*/
+
+// Récupération des catégories via l'API pour le formulaire d'ajout
+
+const categoryForm = async () => {
+    await fetchCategory()
+ 
+    for(const category of categoryArray){
+
+        const selectCategory = document.getElementById('category')
+        const optionCategory = document.createElement('option');
+        optionCategory.textContent = category.name   
+        optionCategory.value = category.id          
+        selectCategory.appendChild(optionCategory)   
+    }  
 }
 
+// Permet de visualiser l'image qu'on ajoute du formulaire
+
+const showPreview = (event) => {
+    if(event.target.files.length > 0){
+      const src = URL.createObjectURL(event.target.files[0]);
+      const preview = document.querySelector(".preview_picture");
+      preview.src = src;
+      preview.style.display = 'block';
+      const addPictureContainer = document.querySelector('.add_picture_container')
+      addPictureContainer.style.display = 'none'
+    }
+}
+
+// AddEventListener Fetch Post Add Work
+
+const addWorkProject = document.querySelector('#modal_form_button')
+addWorkProject.addEventListener('click', function (event){
+    event.preventDefault()
+    
+    const image = document.getElementById('image').files[0]
+    const title = document.getElementById('title').value
+    const categoryId = document.getElementById('category').value
+
+    if(image === undefined || title === "" || categoryId === ""){
+        showError('error_add_works', 'Merci de remplir tous les champs')
+        return;
+    }
+    if (categoryId !== "1" && categoryId !== "2" && categoryId !== "3"){        
+        showError('error_add_works', 'Merci de choisir une catégorie valide')
+        return;
+    }
+    try {
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('category', categoryId);
+        formData.append('image', image);
+        
+        fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${bearerAuth.token}`,
+            },
+            body: formData,
+        })
+        .then(response => {
+            if(response.status === 400){
+                showError('error_add_works', 'Merci de remplir tous les champs')
+            }
+            if(response.status === 401){
+                alert("Vous n'êtes pas autorisé à ajouter un projet");
+                location.href = "login.html";
+            }
+            if (response.status === 201){
+                resetModalForm()
+                clearError()
+                updateWorks()
+                works()
+                worksModal()                
+            }
+            if(response.status === 500){
+                showError('error_add_works', 'Erreur serveur')
+            }
+        })
+    }   
+    catch (error) {
+        console.log(error);
+    }
+})
+
+// Réinitialise le formulaire d'ajout
+
+const resetModalForm = () => {
+    clearError()
+    const preview = document.querySelector(".preview_picture");
+    const addPictureContainer = document.querySelector('.add_picture_container')
+    preview.style.display = 'none';
+    addPictureContainer.style.display = 'flex'
+    document.getElementById('title').value = ''
+    document.getElementById('category').value = ''
+}
+
+// Permet d'actualiser les travaux sans recharger la page
+
+const updateWorks = () => {
+    const projet = document.querySelector('.gallery')
+    projet.innerHTML = ""
+    const modalProjet = document.querySelector('.modal_works')
+    modalProjet.innerHTML = ""
+}
+
+/* ---------------------------------------- Validate Message Form ----------------------------------------*/
+
+// Affiche la validation
+
+const showValidate = (validateElement, validateMessage) => {
+    document.querySelector('.'+validateElement).classList.add('display_validate')
+    document.querySelector('.'+validateElement).innerHTML = validateMessage
+}
+
+// Efface la validation
+
+const clearValidate = () => {
+    const validates = document.querySelectorAll('.validate')
+    for(const validate of validates){
+        validate.classList.remove('display_validate')
+    }
+}
+
+/* ---------------------------------------- Error Message Form ----------------------------------------*/
+
+// Affiche l'erreur
+
+const showError = (errorElement, errorMessage) => {
+    document.querySelector("."+errorElement).classList.add('display-error')
+    document.querySelector('.'+errorElement).innerHTML = errorMessage
+}
+
+// Efface l'erreur
+
+const clearError = () => {
+    const errors = document.querySelectorAll('.error')
+    for(const error of errors){
+        error.classList.remove('display-error')
+    }
+}
+        
 /* ---------------------------------------- AddEventListener Modal Gallery ----------------------------------------*/
 
 const modalGallery = document.querySelector('.modal_gallery') 
@@ -196,16 +379,19 @@ modalGalleryOpen.addEventListener('click', function(){
 // Ferme la modale Gallery depuis la croix
 const modalCloseGallery = document.querySelector('.modal_gallery_close') 
 modalCloseGallery.addEventListener('click', function(){
+    clearValidate()
     modalGallery.style.display = 'none'
 })
 // Ferme la modale Gallery quand on clique en dehors de la modale
 const modalCloseOverlayGallery = document.querySelector('.overlay_gallery')
 modalCloseOverlayGallery.addEventListener('click', function(){
+    clearValidate()
     modalGallery.style.display = 'none'    
 })
 // Ouvre la modale Form
 const modalFormOpen = document.querySelector('.modal_gallery_button') 
 modalFormOpen.addEventListener('click', function(){
+    clearValidate()
     modalForm.style.display = 'block'
     modalGallery.style.display = 'none'
 })
@@ -217,16 +403,19 @@ const modalForm = document.querySelector('.modal_form')
 // Ferme la modale Form depuis la croix
 const modalCloseForm = document.querySelector('.modal_form_close') 
 modalCloseForm.addEventListener('click', function(){
+    resetModalForm()
     modalForm.style.display = 'none'
 })
 // Ferme la modale Form quand on clique en dehors de la modale
 const modalCloseOverlayForm = document.querySelector('.overlay_form')
 modalCloseOverlayForm.addEventListener('click', function(){
+    resetModalForm()
     modalForm.style.display = 'none'    
 })
 // Retourne vers la modale Gallery
 const modalGalleryReturn = document.querySelector('.modal_arrow')
 modalGalleryReturn.addEventListener('click', function(){
+    resetModalForm()
     modalGallery.style.display = 'block'   
     modalForm.style.display = 'none'
 })
@@ -236,3 +425,4 @@ modalGalleryReturn.addEventListener('click', function(){
 works()
 worksModal()
 menuFilter()
+categoryForm()

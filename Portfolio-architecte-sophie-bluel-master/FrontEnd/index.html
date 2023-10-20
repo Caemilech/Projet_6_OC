@@ -20,9 +20,10 @@
 		<div class="modal">
 			<img class="modal_close modal_gallery_close" src="./assets/icons/closemodal.svg" alt="Fermeture de la modale">
 			<span>Galerie photo</span>
-			<div class="modal_works">
-
+			<div class="modal_works">			
+				
 			</div>
+			<p class="validate validate_delete_works"></p>
 			<p class="modal_line"></p>
 			<span class="modal_button modal_gallery_button">Ajouter une photo</span>
 		</div>
@@ -34,23 +35,25 @@
 			<img class="modal_arrow" src="./assets/icons/arrowmodal.svg" alt="Retour vers la galerie photo">
 			<span>Ajout photo</span>
 			<section id="contact" class="modal_form_section">
-				<form action="#" method="post">
-					<div class="modal_add_picture_container">
-						<img src="./assets/icons/picture.svg" alt="Photo">
-						<label class="modal_add_picture_button" type="photo">+ Ajouter photo
-							<input type="file" name="photo" id="photo">
-						</label>
-						<span class="modal_add_picture_text">jpg, png : 4mo max</span>
+				<form action="#" method="post" name="add_works" class="add_works">
+					<div id="modal_add_picture_container">
+						<img class="preview_picture">
+						<div class="add_picture_container">
+							<img src="./assets/icons/picture.svg" alt="Photo">
+							<label id="modal_add_picture_button" type="image">+ Ajouter photo
+								<input type="file" name="image" id="image" onchange="showPreview(event)">
+							</label>
+							<span class="modal_add_picture_text">jpg, png : 4mo max</span>
+						</div>
 					</div>
-					<label for="name">Titre</label>
-					<input type="name" name="name" id="name">
-					<label for="name">Catégorie</label>
-					<select id="select_category">
-						<option value="1">Objets</option>
-						<option value="2">Appartements</option>
-						<option value="3">Hôtels & restaurants</option>
+					<label for="title">Titre</label>
+					<input type="text" name="title" id="title">
+					<label for="category">Catégorie</label>
+					<select name="category" id="category">
+						
 					</select>
-					<input class="modal_form_button" type="submit" value="Valider">
+					<p class="error error_add_works"></p>
+					<input id="modal_form_button" type="submit" value="Valider">
 				</form>
 				<p class="modal_line"></p>
 			</section>
@@ -62,7 +65,7 @@
 		<ul>
 			<li>projets</li>
 			<li>contact</li>
-			<li class="logout"><a href="login.html"></a>login</li>
+			<li class="login login_link"><a href="./login.html">login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>

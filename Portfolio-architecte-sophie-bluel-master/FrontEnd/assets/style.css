@@ -185,6 +185,10 @@ footer nav ul {
 	margin: 2em
 }
 /********** My Works *********/
+a{
+	text-decoration: none;
+	color: black;
+}
 /***** Error Form *****/
 .error{
 	display: none;
@@ -195,6 +199,23 @@ footer nav ul {
 .display-error{
 	display: block;	
 	margin-top: 15px;
+}
+/***** Validate Form *****/
+.validate{
+	display: none;	
+	color: black;
+	background-color: #c9fec9;
+	padding: 10px;	
+}
+.validate_delete_works{
+	position: relative;
+	top: -55px;
+}
+.error_add_works{
+	position: relative;
+}
+.display_validate{
+	display: block;	
 }
 /***** CSS Filters *****/
 .filters{
@@ -220,8 +241,8 @@ footer nav ul {
 	background-color: #1D6154;
     color: white;
 }
-/****** Login Page *****/
-.login{
+/****** Login / Logout Link *****/
+.login_link, .logout_link{
 	font-weight: 600;
 }
 .password{
@@ -325,7 +346,7 @@ footer nav ul {
 	position: absolute;
 	width: 420px;
 	height: 1px;
-	top: 520px;
+	top: 525px;
 	background: #B3B3B3;
 }
 /*** Modal Gallery Button***/
@@ -350,29 +371,44 @@ footer nav ul {
 	left: 30px;
 }
 /*** Modal Form Add Picture Container ***/
-.modal_add_picture_container{
+#modal_add_picture_container{
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 6px;
+	position: relative;	
 	height: 169px;
 	margin-top: 36px;
 	background: #E8F1F6;
 	border-radius: 3px;
 }
-.modal_add_picture_container label{
-	margin: 0 !important;
+.add_picture_container{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+}
+.preview_picture{
+	position: absolute;
+	display: none;
+	width: 30%;
+	height: 100%;
+}
+#modal_add_picture_container label{
+	margin: 0;
+}
+#modal_add_picture_container span{
+	font-size: 14px;
 }
 input[type='file']{
 	display: none;
 }
-.modal_add_picture_button{
+#modal_add_picture_button{
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	width: 173px;
-	height: 36px !important;
+	height: 36px;
 	border-radius: 50px;
 	background: #CBD6DC;
 	color: #306685;	
@@ -396,9 +432,9 @@ input[type='file']{
 	font-size: 10px;
 }
 /*** Modal Form Button ***/
-.modal_form_button{
-	width: 237px !important;
+#modal_form_button {
+	width: 237px;
 	height: 36px !important;
-	background: #A7A7A7 !important;
-	margin-top: 70px !important;
+	background: #A7A7A7;
+	margin-top: 70px;
 }
