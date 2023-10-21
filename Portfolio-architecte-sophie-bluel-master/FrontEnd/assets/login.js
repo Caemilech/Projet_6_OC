@@ -17,23 +17,25 @@ formLogIn.addEventListener('submit', function (event) {
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         body: chargeUtile
     })
-    .then(response => { 
-        if(!response.ok){                                  
+    .then(response => {                            
+        if (response.status === 404) {
             if (logIn.email !== '' && logIn.password !== "") {
-                if (response.status === 404) {
-                    showError('user-error', 'Utilisateur introuvable')
-                }
-            }
-            if (response.status === 401) {
-                showError('password-error', 'Mot de passe incorrect')
+                showError('user-error', 'Utilisateur introuvable')
             }
             document.getElementById('password').value = ''
-        throw new Error(response.status)
+            throw new Error ('Email requis')
         }
-        return response.json
+        if (response.status === 401) {
+            showError('password-error', 'Mot de passe incorrect')
+            document.getElementById('password').value = ''
+            throw new Error ('Mot de passe incorrect')
+        }        
+        
+        return response.json()
+        
     })
     .then(data => {
-        localStorage.setItem('BearerAuth', JSON.stringify(data))
+        localStorage.setItem('BearerAuth', JSON.stringify(data)) 
         location.href = 'index.html'
     })
     .catch(error => {      

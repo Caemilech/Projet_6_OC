@@ -31,6 +31,7 @@ const works = async () => {
         const imgWorks = document.createElement('img')
         const gallery = document.querySelector('.gallery')
         const legend = document.createElement('figure')
+        legend.classList = `Project_${works.id}`
         const legendWorks = document.createElement('figcaption')
         gallery.appendChild(legend)
         legend.appendChild(imgWorks)
@@ -120,14 +121,13 @@ const bearerAuth = JSON.parse(localStorage.getItem('BearerAuth'))
 
 const login = document.querySelector('.login')
  
-if (bearerAuth && bearerAuth.token){
+if(bearerAuth && bearerAuth.token){
     // LogOut
     login.classList = 'logout logout_link'
     document.querySelector('.logout').textContent = 'logout'
     // Mode édition
     const modeEdition = document.querySelector('.mode_edition')
-    modeEdition.style.backgroundColor = 'black'
-    modeEdition.style.height = '59px'
+    modeEdition.style.display = 'flex'
     const imgModeEdition = document.createElement('img')
     imgModeEdition.setAttribute('src', './assets/icons/modeEdition.svg')
     imgModeEdition.setAttribute('alt', 'Mode édition')
@@ -152,7 +152,10 @@ if (bearerAuth && bearerAuth.token){
 
 const logout = document.querySelector('.logout')
 
-logout.addEventListener('click', function () {    
+if(logout)
+logout.addEventListener('click', function (){ 
+    const modeEdition = document.querySelector('.mode_edition')
+    modeEdition.style.display = 'none'   
     localStorage.clear()  
     location.href = 'login.html'
 })
@@ -170,7 +173,8 @@ const worksModal = async () => {
         const imgWorks = document.createElement('img')
         imgWorks.classList = 'modal_works_img'        
         
-        const legend = document.createElement('figure') 
+        const legend = document.createElement('figure')
+        legend.classList = `Project_modal_${works.id}`
         
         modalWorks.appendChild(legend)
         legend.appendChild(imgWorks)
@@ -198,8 +202,8 @@ const worksModal = async () => {
             })
             .then(response => {
                 if(response.status === 204){
+                    showValidate('validate', `Projets ${works.id} a bien été supprimé`)  
                     refreshWorks()
-                    showValidate('validate', `Projets ${works.id} a bien été supprimé`)
                 }
                 if(response.status === 401){
                     alert("Vous n'êtes pas autorisé à supprimer ce projet, merci de vous connecter avec un compte valide")
@@ -210,18 +214,17 @@ const worksModal = async () => {
                 console.log(error)
             })
 
-            function refreshWorks(){
-                                         
+            function refreshWorks(){                      
                 // Supprime le projet de la page d'accueil
-                const projets = document.querySelector('.gallery figure')
+                const projets = document.querySelector(`.Project_${works.id}`)
+                console.log(projets)
                 projets.remove()
                 // Supprime le projet de la modale
-                const modalProjets = document.querySelector('.modal_works figure')         
+                const modalProjets = document.querySelector(`.Project_modal_${works.id}`)         
                 modalProjets.remove()
             }              
         })
-    }
-    
+    }  
 }   
 
 /* ----------------------------------------  Modal Form ----------------------------------------*/
@@ -246,7 +249,7 @@ const categoryForm = async () => {
 const showPreview = (event) => {
     if(event.target.files.length > 0){
       const src = URL.createObjectURL(event.target.files[0]);
-      const preview = document.querySelector(".preview_picture");
+      const preview = document.querySelector('.preview_picture');
       preview.src = src;
       preview.style.display = 'block';
       const addPictureContainer = document.querySelector('.add_picture_container')
@@ -259,6 +262,8 @@ const showPreview = (event) => {
 const addWorkProject = document.querySelector('#modal_form_button')
 addWorkProject.addEventListener('click', function (event){
     event.preventDefault()
+    clearError()
+    clearValidate()
     
     const image = document.getElementById('image').files[0]
     const title = document.getElementById('title').value
@@ -293,9 +298,9 @@ addWorkProject.addEventListener('click', function (event){
                 alert("Vous n'êtes pas autorisé à ajouter un projet");
                 location.href = "login.html";
             }
-            if (response.status === 201){
+            if(response.status === 201){
+                showValidate('validate_add_works',`Le travaux ${title} a bien été ajouté`)
                 resetModalForm()
-                clearError()
                 updateWorks()
                 works()
                 worksModal()                
@@ -313,7 +318,6 @@ addWorkProject.addEventListener('click', function (event){
 // Réinitialise le formulaire d'ajout
 
 const resetModalForm = () => {
-    clearError()
     const preview = document.querySelector(".preview_picture");
     const addPictureContainer = document.querySelector('.add_picture_container')
     preview.style.display = 'none';
@@ -394,6 +398,7 @@ modalFormOpen.addEventListener('click', function(){
     clearValidate()
     modalForm.style.display = 'block'
     modalGallery.style.display = 'none'
+    document.getElementById('category').value = ''
 })
 
 /* ---------------------------------------- AddEventListener Modal Form ----------------------------------------*/
@@ -404,18 +409,21 @@ const modalForm = document.querySelector('.modal_form')
 const modalCloseForm = document.querySelector('.modal_form_close') 
 modalCloseForm.addEventListener('click', function(){
     resetModalForm()
+    clearValidate()
     modalForm.style.display = 'none'
 })
 // Ferme la modale Form quand on clique en dehors de la modale
 const modalCloseOverlayForm = document.querySelector('.overlay_form')
 modalCloseOverlayForm.addEventListener('click', function(){
     resetModalForm()
+    clearValidate()
     modalForm.style.display = 'none'    
 })
 // Retourne vers la modale Gallery
 const modalGalleryReturn = document.querySelector('.modal_arrow')
 modalGalleryReturn.addEventListener('click', function(){
     resetModalForm()
+    clearValidate()
     modalGallery.style.display = 'block'   
     modalForm.style.display = 'none'
 })

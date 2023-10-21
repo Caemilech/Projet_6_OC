@@ -214,6 +214,10 @@ a{
 .error_add_works{
 	position: relative;
 }
+.validate_add_works{
+	position: relative;
+	margin-top: 15px;
+}
 .display_validate{
 	display: block;	
 }
@@ -251,11 +255,13 @@ a{
 }
 /***** User Connected *****/
 .mode_edition{
-	display: flex;
+	display: none;
 	align-items: center;
 	justify-content: center;
 	gap: 12px;	
+	height: 59px;
 	font-size: 16px;
+	background-color: black;
 }
 .mode_edition span{
 	color: white;	
@@ -299,8 +305,7 @@ a{
 	left: 50%;
 	transform: translate(-50%,-50%);
 	width: 50%;
-	max-width: 420px;
-	padding: 30px 105px 30px 105px;
+	padding: 30px 60px 30px 60px;
 	background-color: white;
 	border-radius: 10px;
 	text-align: center;	
@@ -308,8 +313,8 @@ a{
 /*** Modal Close ***/
 .modal_close{
 	position: absolute;
-	top: 25px;
-	right: 30px;
+	top: 15px;
+	right: 20px;
 }
 /*** Modal Title ***/
 .modal span{
@@ -317,12 +322,14 @@ a{
 }
 /*** Modal Gallery Works Container ***/
 .modal_works{
-	min-height: 370px;
+	max-height: 370px;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 26px 6px;
-	margin-top: 46px;
-	margin-bottom: 68px;	
+	justify-content: center;
+	margin: 30px 0 20px 0;
+	padding: 0 30px 0 30px;	
+	overflow: auto;
 }
 /*** Modal Gallery Icon Delete ***/
 .modal_works figure{
@@ -342,11 +349,8 @@ a{
 }
 /*** Modal Line***/
 .modal_line{
-	display: flex;
-	position: absolute;
-	width: 420px;
-	height: 1px;
-	top: 525px;
+	width: 100%;
+	margin: 25px 0 25px 0;
 	background: #B3B3B3;
 }
 /*** Modal Gallery Button***/
@@ -354,7 +358,7 @@ a{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 237px;
+	max-width: 237px;
 	height: 36px;
 	margin: auto;	
 	border-radius: 60px;
@@ -367,8 +371,8 @@ a{
 /*** Modal Form Arrow ***/
 .modal_arrow{
 	position: absolute;
-	top: 25px;
-	left: 30px;
+	top: 20px;
+	left: 20px;
 }
 /*** Modal Form Add Picture Container ***/
 #modal_add_picture_container{
@@ -407,7 +411,7 @@ input[type='file']{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 173px;
+	min-width: 140px;
 	height: 36px;
 	border-radius: 50px;
 	background: #CBD6DC;
@@ -426,6 +430,7 @@ input[type='file']{
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	background-color: white;
 }
 .modal_add_picture_container .modal_add_picture_text{
 	color: #444;
@@ -433,8 +438,8 @@ input[type='file']{
 }
 /*** Modal Form Button ***/
 #modal_form_button {
-	width: 237px;
+	max-width: 237px;
 	height: 36px !important;
 	background: #A7A7A7;
-	margin-top: 70px;
+	margin: 0 auto;
 }
