@@ -1,5 +1,6 @@
-/* ---------------------------------------- AddEventListener Fetch Post Login ----------------------------------------*/
-
+/* ---------------------------------------- Call API Login ----------------------------------------*/
+/* Fetch Connect
+Événement qui permet de se connecter au site web */
 const formLogIn = document.querySelector('.login_form')
 formLogIn.addEventListener('submit', function (event) {
     event.preventDefault()
@@ -8,76 +9,61 @@ formLogIn.addEventListener('submit', function (event) {
         email: document.getElementById('email').value,
         password: document.getElementById('password').value,
     }
-    console.log(logIn)
-    // Création de la charge utile au format JSON
-    const chargeUtile = JSON.stringify(logIn);
-    // Appel de la fonction fetch avec toutes les informations nécessaires
-    fetch('http://localhost:5678/api/users/login', {
-        method: 'POST',
-        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: chargeUtile
-    })
-    .then(response => {                            
-        if (response.status === 404) {
-            if (logIn.email !== '' && logIn.password !== "") {
-                showError('user-error', 'Utilisateur introuvable')
-            }
-            document.getElementById('password').value = ''
-            throw new Error ('Email requis')
-        }
-        if (response.status === 401) {
-            showError('password-error', 'Mot de passe incorrect')
-            document.getElementById('password').value = ''
-            throw new Error ('Mot de passe incorrect')
-        }        
-        
-        return response.json()
-        
-    })
-    .then(data => {
-        localStorage.setItem('BearerAuth', JSON.stringify(data)) 
-        location.href = 'index.html'
-    })
-    .catch(error => {      
+    if (logIn.email === ''){
+        clearError()
+        showError('email-error', 'Email requis')
+        return
+    }
+    if (logIn.password === ''){
+        clearError()
+        showError('password-error', 'Mot de passe requis')
+        return
+    }
+    try {
+        // Création de la charge utile au format JSON
+        const chargeUtile = JSON.stringify(logIn);
+        // Appel de la fonction fetch avec toutes les informations nécessaires
+        fetch('http://localhost:5678/api/users/login', {
+            method: 'POST',
+            headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+            body: chargeUtile
+        })
+            .then(res => {
+                if(res.status === 200){
+                    return res.json()
+                }
+                if(res.status === 404){
+                    clearError()
+                    showError('user-error', 'Utilisateur introuvable')
+                    document.getElementById('password').value = ''
+                    throw new Error('Utilisateur Introuvable')
+                }
+                if(res.status === 401){
+                    clearError()
+                    showError('password-error', 'Mot de passe incorrect')
+                    document.getElementById('password').value = ''
+                    throw new Error('Mot de passe incorrect')
+                }
+            })
+            .then(data => {
+                localStorage.setItem('BearerAuth', JSON.stringify(data))
+                location.href = 'index.html'
+            })
+    }
+    catch(error) {
         console.log(error)
-    })
+    }
 })
-
 /* ---------------------------------------- Error Message Form ----------------------------------------*/
-
 // Affiche l'erreur
-
 const showError = (errorElement, errorMessage) => {
-    document.querySelector('.'+errorElement).classList.add('display-error')
+    document.querySelector('.'+errorElement).classList.add('display_error')
     document.querySelector('.'+errorElement).innerHTML = errorMessage
 }
-
 // Efface l'erreur
-
 const clearError = () => {
     const errors = document.querySelectorAll('.error')
     for(const error of errors){
-        error.classList.remove('display-error')
+        error.classList.remove('display_error')
     }
-}
-
-// Gestion de l'erreur
-
-const form = document.forms['login_form']
-
-form.onsubmit = function(event){
-    
-    clearError()
-
-    if (form.email.value === ''){
-        showError('email-error', 'Email requis')
-        return false
-    }
-
-    if (form.password.value === ''){
-        showError('password-error', 'Mot de passe requis')
-        return false
-    }
-
-    event.preventDefault()
 }

@@ -36,14 +36,14 @@
 			<span>Ajout photo</span>
 			<section id="contact" class="modal_form_section">
 				<form action="#" method="post" name="add_works" class="add_works">
-					<div id="modal_add_picture_container">
-						<img class="preview_picture">
-						<div class="add_picture_container">
-							<img src="./assets/icons/picture.svg" alt="Photo">
-							<label id="modal_add_picture_button" type="image">+ Ajouter photo
-								<input type="file" name="image" id="image" onchange="showPreview(event)">
+					<div id="modal_add_img_container">
+						<img class="img_placeholder">
+						<div class="add_img_container">
+							<img src="./assets/icons/picture.svg" alt="Image">
+							<label id="modal_add_img_button" type="image">+ Ajouter photo
+								<input type="file" name="image" id="image" onchange="showImgPlaceholder(event)">
 							</label>
-							<span class="modal_add_picture_text">jpg, png : 4mo max</span>
+							<span class="modal_add_img_text">jpg, png : 4mo max</span>
 						</div>
 					</div>
 					<label for="title">Titre</label>
