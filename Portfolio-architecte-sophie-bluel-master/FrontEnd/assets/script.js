@@ -220,16 +220,20 @@ const showImgPlaceholder = (event) => {
 const addWork = document.querySelector('.add_works')
 addWork.addEventListener('submit', function (event){
     event.preventDefault()
-    clearError()
     // Permet de récupérer l'image, le titre et la catégorie du formulaire d'ajout d'un projet
     const image = document.getElementById('image').files[0]
     const title = document.getElementById('title').value
     const category = document.getElementById('category').value
+    console.log(image)
     if(image === undefined || title === '' || category === ''){
+        clearError()
+        clearValidate()
         showError('error_add_works', 'Merci de remplir tous les champs')
         return
     }
-    if(category !== '1' && category !== '2' && category !== '3'){        
+    if(category !== '1' && category !== '2' && category !== '3'){     
+        clearError()
+        clearValidate()   
         showError('error_add_works', 'Merci de choisir une catégorie valide')
         return
     }
@@ -249,13 +253,16 @@ addWork.addEventListener('submit', function (event){
         })
         .then(res => {
             if(res.status === 201){
+                clearError()
                 showValidate('validate_add_works',`Le projet ${title} a bien été ajouté`)
                 formAddWorkReset()
                 updateWorks() 
                 works()
-                modalGalleryWorks()               
+                modalGalleryWorks()              
             }
             if(res.status === 400){
+                clearError()
+                clearValidate()
                 showError('error_add_works', 'Merci de remplir tous les champs')
             }
             if(res.status === 401){
@@ -263,6 +270,8 @@ addWork.addEventListener('submit', function (event){
                 location.href = 'login.html'
             }
             if(res.status === 500){
+                clearError()
+                clearValidate()
                 showError('error_add_works', 'Erreur serveur')
             }
         })
@@ -277,8 +286,8 @@ const formAddWorkReset= () => {
     imgPlaceholder.style.display = 'none'
     const addImgWork = document.querySelector('.add_img_container')
     addImgWork.style.display = 'flex'
+    document.getElementById('image').value = null
     document.getElementById('title').value = ''
-    document.getElementById('category').value = ''
 }
 // Permet de voir l'ajout d'un projet sans recharger la page
 const updateWorks = () => {
@@ -346,6 +355,7 @@ const modalForm = document.querySelector('.modal_form')
 const modalCloseForm = document.querySelector('.modal_form_close') 
 modalCloseForm.addEventListener('click', function(){
     formAddWorkReset()
+    clearError()
     clearValidate()
     modalForm.style.display = 'none'
 })
@@ -353,6 +363,7 @@ modalCloseForm.addEventListener('click', function(){
 const modalCloseOverlayForm = document.querySelector('.overlay_form')
 modalCloseOverlayForm.addEventListener('click', function(){
     formAddWorkReset()
+    clearError()
     clearValidate()
     modalForm.style.display = 'none'    
 })
@@ -360,6 +371,7 @@ modalCloseOverlayForm.addEventListener('click', function(){
 const modalGalleryReturn = document.querySelector('.modal_arrow')
 modalGalleryReturn.addEventListener('click', function(){
     formAddWorkReset()
+    clearError()
     clearValidate()
     modalForm.style.display = 'none'
     modalGallery.style.display = 'block'   

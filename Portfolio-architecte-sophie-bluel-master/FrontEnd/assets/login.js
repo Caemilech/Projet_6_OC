@@ -40,9 +40,9 @@ formLogIn.addEventListener('submit', function (event) {
                 }
                 if(res.status === 401){
                     clearError()
-                    showError('password-error', 'Mot de passe incorrect')
+                    showError('password-error', 'Email ou Mot de passe incorrect')
                     document.getElementById('password').value = ''
-                    throw new Error('Mot de passe incorrect')
+                    throw new Error('Email ou Mot de passe incorrect')
                 }
             })
             .then(data => {
